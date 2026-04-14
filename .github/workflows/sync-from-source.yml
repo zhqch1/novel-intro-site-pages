@@ -53,6 +53,7 @@ jobs:
       - name: Sync built files into public repo
         run: |
           cp -a source/docs/. ./
+          rm -rf source .gitmodules
 
       - name: Commit and push if changed
         run: |
