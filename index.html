@@ -42,35 +42,47 @@
       </header>
 
       <main class="layout">
-        <section class="toolbar">
-          <label class="search-box">
-            <span class="search-box__label">搜索</span>
-            <input
-              id="search-input"
-              type="search"
-              placeholder="按标题、作者、分类、梗概关键词搜索"
-              autocomplete="off"
-            />
-          </label>
-
-          <div class="toolbar__row">
-            <label class="select-box">
-              <span>来源</span>
-              <select id="source-select"></select>
+        <section class="toolbar" id="filter-toolbar">
+          <div class="toolbar__content" id="toolbar-content">
+            <label class="search-box">
+              <span class="search-box__label">搜索</span>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="按标题、作者、分类、梗概关键词搜索"
+                autocomplete="off"
+              />
             </label>
 
-            <label class="select-box">
-              <span>分类</span>
-              <select id="category-select"></select>
-            </label>
+            <div class="toolbar__row">
+              <label class="select-box">
+                <span>来源</span>
+                <select id="source-select"></select>
+              </label>
 
-            <label class="check-box">
-              <input id="summary-only" type="checkbox" checked />
-              <span>仅看已生成梗概</span>
-            </label>
+              <label class="select-box">
+                <span>分类</span>
+                <select id="category-select"></select>
+              </label>
+
+              <label class="check-box">
+                <input id="summary-only" type="checkbox" checked />
+                <span>仅看已生成梗概</span>
+              </label>
+            </div>
+
+            <div class="chips" id="category-chips"></div>
           </div>
 
-          <div class="chips" id="category-chips"></div>
+          <button
+            id="toolbar-toggle"
+            class="toolbar__toggle"
+            type="button"
+            aria-expanded="true"
+            aria-controls="toolbar-content"
+          >
+            收起筛选
+          </button>
         </section>
 
         <section class="results-header">

@@ -6,6 +6,9 @@ const elements = {
   statUpdated: document.querySelector("#stat-updated"),
   statCool18: document.querySelector("#stat-cool18"),
   statT66y: document.querySelector("#stat-t66y"),
+  toolbar: document.querySelector("#filter-toolbar"),
+  toolbarToggle: document.querySelector("#toolbar-toggle"),
+  toolbarContent: document.querySelector("#toolbar-content"),
   searchInput: document.querySelector("#search-input"),
   sourceSelect: document.querySelector("#source-select"),
   categorySelect: document.querySelector("#category-select"),
@@ -33,6 +36,7 @@ const state = {
   source: "全部",
   category: "全部",
   summaryOnly: true,
+  toolbarExpanded: window.matchMedia("(min-width: 901px)").matches,
 };
 
 function formatDate(dateString) {
@@ -105,6 +109,12 @@ function buildSearchText(item) {
   return [item.sourceLabel, item.title, item.author, item.category, item.summary]
     .join(" ")
     .toLowerCase();
+}
+
+function renderToolbarState() {
+  elements.toolbar.classList.toggle("toolbar--collapsed", !state.toolbarExpanded);
+  elements.toolbarToggle.textContent = state.toolbarExpanded ? "收起筛选" : "展开筛选";
+  elements.toolbarToggle.setAttribute("aria-expanded", String(state.toolbarExpanded));
 }
 
 function applyFilters() {
@@ -210,6 +220,7 @@ async function initialize() {
   }
 
   state.payload = await response.json();
+  renderToolbarState();
   setStats(state.payload);
   populateSources(state.payload);
   populateCategories(state.payload);
@@ -249,6 +260,11 @@ elements.categoryChips.addEventListener("click", (event) => {
 elements.loadMore.addEventListener("click", () => {
   state.visibleCount += PAGE_SIZE;
   render();
+});
+
+elements.toolbarToggle.addEventListener("click", () => {
+  state.toolbarExpanded = !state.toolbarExpanded;
+  renderToolbarState();
 });
 
 elements.closeDetail.addEventListener("click", () => {

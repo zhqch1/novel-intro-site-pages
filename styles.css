@@ -111,9 +111,40 @@ body {
   position: sticky;
   top: 10px;
   z-index: 10;
-  margin-bottom: 18px;
-  padding: 16px;
+  margin-bottom: 32px;
+  padding: 16px 16px 28px;
   border-radius: var(--radius);
+  overflow: visible;
+}
+
+.toolbar__content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.toolbar--collapsed {
+  padding-bottom: 18px;
+}
+
+.toolbar--collapsed .toolbar__content {
+  display: none;
+}
+
+.toolbar__toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 999px;
+  padding: 9px 16px;
+  background: rgba(15, 23, 42, 0.96);
+  color: #dbeafe;
+  font-size: 0.88rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(3, 7, 18, 0.35);
 }
 
 .search-box,
@@ -145,7 +176,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 14px;
   align-items: end;
 }
 
@@ -172,7 +202,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 14px;
 }
 
 .chip {
@@ -396,7 +425,11 @@ body {
 
   .toolbar {
     top: 6px;
-    padding: 14px;
+    padding: 14px 14px 24px;
+  }
+
+  .toolbar__toggle {
+    min-width: 108px;
   }
 
   .cards {
