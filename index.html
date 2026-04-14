@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <title>小说梗概站</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero__text">
+          <p class="eyebrow">Novel Intro Site</p>
+          <h1>小说梗概站</h1>
+          <p class="hero__summary">
+            面向手机浏览的静态小说介绍页，支持搜索、分类筛选、摘要浏览和原帖跳转。
+          </p>
+        </div>
+        <div class="hero__stats" id="hero-stats">
+          <div class="stat-card">
+            <span class="stat-card__label">总条目</span>
+            <strong id="stat-total">--</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__label">已生成梗概</span>
+            <strong id="stat-summarized">--</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__label">更新时间</span>
+            <strong id="stat-updated">--</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="toolbar">
+          <label class="search-box">
+            <span class="search-box__label">搜索</span>
+            <input
+              id="search-input"
+              type="search"
+              placeholder="按标题、作者、分类、梗概关键词搜索"
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="toolbar__row">
+            <label class="select-box">
+              <span>分类</span>
+              <select id="category-select"></select>
+            </label>
+
+            <label class="check-box">
+              <input id="summary-only" type="checkbox" checked />
+              <span>仅看已生成梗概</span>
+            </label>
+          </div>
+
+          <div class="chips" id="category-chips"></div>
+        </section>
+
+        <section class="results-header">
+          <div>
+            <h2>小说列表</h2>
+            <p id="results-meta">正在加载数据…</p>
+          </div>
+        </section>
+
+        <section id="cards" class="cards" aria-live="polite"></section>
+
+        <div class="empty-state hidden" id="empty-state">
+          <h3>没有匹配结果</h3>
+          <p>换个关键词，或者取消“仅看已生成梗概”。</p>
+        </div>
+
+        <div class="actions">
+          <button id="load-more" class="button hidden" type="button">加载更多</button>
+        </div>
+      </main>
+    </div>
+
+    <dialog id="detail-dialog" class="detail-dialog">
+      <article class="detail-card">
+        <button id="close-detail" class="detail-card__close" type="button" aria-label="关闭">×</button>
+        <p class="detail-card__eyebrow" id="detail-category"></p>
+        <h3 id="detail-title"></h3>
+        <p class="detail-card__meta" id="detail-meta"></p>
+        <p class="detail-card__summary" id="detail-summary"></p>
+        <div class="detail-card__actions">
+          <a id="detail-link" class="button button--primary" target="_blank" rel="noreferrer">查看原帖</a>
+        </div>
+      </article>
+    </dialog>
+
+    <template id="card-template">
+      <article class="card">
+        <div class="card__top">
+          <div class="badge-group">
+            <span class="badge badge--category"></span>
+            <span class="badge badge--status"></span>
+          </div>
+          <button class="card__open" type="button">详情</button>
+        </div>
+        <h3 class="card__title"></h3>
+        <p class="card__meta"></p>
+        <p class="card__summary"></p>
+        <div class="card__actions">
+          <a class="text-link" target="_blank" rel="noreferrer">原帖链接</a>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
