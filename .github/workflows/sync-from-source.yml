@@ -1,0 +1,62 @@
+name: Sync site from private source repo
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout public Pages repo
+        uses: actions/checkout@v4
+
+      - name: Load SSH key for private source repo
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SOURCE_REPO_SSH_KEY }}
+
+      - name: Checkout private source repo
+        uses: actions/checkout@v4
+        with:
+          repository: zhqch1/novel-intro-site
+          path: source
+          ssh-key: ${{ secrets.SOURCE_REPO_SSH_KEY }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+
+      - name: Install dependencies
+        working-directory: source
+        run: npm ci
+
+      - name: Build site
+        working-directory: source
+        run: npm run build
+
+      - name: Sync built files into public repo
+        run: |
+          rsync -av --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            source/docs/ ./
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet --exit-code && git diff --cached --quiet --exit-code; then
+            echo "No changes to publish."
+            exit 0
+          fi
+          git add -A
+          git commit -m "Sync site from source repo"
+          git push
