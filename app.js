@@ -4,7 +4,10 @@ const elements = {
   statTotal: document.querySelector("#stat-total"),
   statSummarized: document.querySelector("#stat-summarized"),
   statUpdated: document.querySelector("#stat-updated"),
+  statCool18: document.querySelector("#stat-cool18"),
+  statT66y: document.querySelector("#stat-t66y"),
   searchInput: document.querySelector("#search-input"),
+  sourceSelect: document.querySelector("#source-select"),
   categorySelect: document.querySelector("#category-select"),
   summaryOnly: document.querySelector("#summary-only"),
   categoryChips: document.querySelector("#category-chips"),
@@ -27,6 +30,7 @@ const state = {
   filteredItems: [],
   visibleCount: PAGE_SIZE,
   query: "",
+  source: "全部",
   category: "全部",
   summaryOnly: true,
 };
@@ -55,10 +59,30 @@ function formatTimestamp(timestamp) {
   });
 }
 
+function getSourceStats(payload, key) {
+  return payload.sources.find((item) => item.key === key) ?? {
+    totalCount: 0,
+    summarizedCount: 0,
+  };
+}
+
 function setStats(payload) {
   elements.statTotal.textContent = payload.totalCount.toLocaleString("zh-CN");
   elements.statSummarized.textContent = payload.summarizedCount.toLocaleString("zh-CN");
   elements.statUpdated.textContent = formatTimestamp(payload.sourceUpdatedAt);
+  elements.statCool18.textContent = getSourceStats(payload, "cool18").summarizedCount.toLocaleString(
+    "zh-CN"
+  );
+  elements.statT66y.textContent = getSourceStats(payload, "t66y").summarizedCount.toLocaleString(
+    "zh-CN"
+  );
+}
+
+function populateSources(payload) {
+  const sources = ["全部", ...payload.sources.map((item) => item.label)];
+  elements.sourceSelect.innerHTML = sources
+    .map((source) => `<option value="${source}">${source}</option>`)
+    .join("");
 }
 
 function populateCategories(payload) {
@@ -78,7 +102,9 @@ function populateCategories(payload) {
 }
 
 function buildSearchText(item) {
-  return [item.title, item.author, item.category, item.summary].join(" ").toLowerCase();
+  return [item.sourceLabel, item.title, item.author, item.category, item.summary]
+    .join(" ")
+    .toLowerCase();
 }
 
 function applyFilters() {
@@ -87,6 +113,9 @@ function applyFilters() {
 
   state.filteredItems = payload.items.filter((item) => {
     if (state.summaryOnly && !item.hasSummary) {
+      return false;
+    }
+    if (state.source !== "全部" && item.sourceLabel !== state.source) {
       return false;
     }
     if (state.category !== "全部" && item.category !== state.category) {
@@ -105,6 +134,7 @@ function applyFilters() {
 function createCard(item) {
   const fragment = elements.cardTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".card");
+  const sourceBadge = fragment.querySelector(".badge--source");
   const categoryBadge = fragment.querySelector(".badge--category");
   const statusBadge = fragment.querySelector(".badge--status");
   const openButton = fragment.querySelector(".card__open");
@@ -113,12 +143,14 @@ function createCard(item) {
   const summary = fragment.querySelector(".card__summary");
   const link = fragment.querySelector(".text-link");
 
+  sourceBadge.textContent = item.sourceLabel;
+  sourceBadge.dataset.source = item.source;
   categoryBadge.textContent = item.category;
   statusBadge.textContent = item.hasSummary ? "已生成梗概" : "梗概生成中";
   statusBadge.dataset.status = item.hasSummary ? "ready" : "pending";
 
   title.textContent = item.title;
-  meta.textContent = `${item.author} · ${formatDate(item.date)} · TID ${item.tid}`;
+  meta.textContent = `${item.sourceLabel} · ${item.author} · ${formatDate(item.date)} · TID ${item.tid}`;
   summary.textContent = item.summary || "当前还没有生成梗概，后续刷新数据后会自动补齐。";
   link.href = item.url || "#";
   link.textContent = item.url ? "原帖链接" : "暂无原帖链接";
@@ -161,7 +193,7 @@ function render() {
 }
 
 function openDetail(item) {
-  elements.detailCategory.textContent = item.category;
+  elements.detailCategory.textContent = `${item.sourceLabel} · ${item.category}`;
   elements.detailTitle.textContent = item.title;
   elements.detailMeta.textContent = `${item.author} · ${formatDate(item.date)} · TID ${item.tid}`;
   elements.detailSummary.textContent =
@@ -179,12 +211,18 @@ async function initialize() {
 
   state.payload = await response.json();
   setStats(state.payload);
+  populateSources(state.payload);
   populateCategories(state.payload);
   applyFilters();
 }
 
 elements.searchInput.addEventListener("input", (event) => {
   state.query = event.target.value;
+  applyFilters();
+});
+
+elements.sourceSelect.addEventListener("change", (event) => {
+  state.source = event.target.value;
   applyFilters();
 });
 

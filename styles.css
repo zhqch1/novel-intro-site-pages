@@ -81,7 +81,7 @@ body {
 
 .hero__stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
 }
 
@@ -249,6 +249,16 @@ body {
 .badge--category {
   background: rgba(96, 165, 250, 0.12);
   color: #bfdbfe;
+}
+
+.badge--source[data-source="cool18"] {
+  background: rgba(168, 85, 247, 0.14);
+  color: #e9d5ff;
+}
+
+.badge--source[data-source="t66y"] {
+  background: rgba(20, 184, 166, 0.14);
+  color: #99f6e4;
 }
 
 .badge--status[data-status="ready"] {

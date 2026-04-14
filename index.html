@@ -30,6 +30,14 @@
             <span class="stat-card__label">更新时间</span>
             <strong id="stat-updated">--</strong>
           </div>
+          <div class="stat-card">
+            <span class="stat-card__label">Cool18 已生成</span>
+            <strong id="stat-cool18">--</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__label">T66y 已生成</span>
+            <strong id="stat-t66y">--</strong>
+          </div>
         </div>
       </header>
 
@@ -46,6 +54,11 @@
           </label>
 
           <div class="toolbar__row">
+            <label class="select-box">
+              <span>来源</span>
+              <select id="source-select"></select>
+            </label>
+
             <label class="select-box">
               <span>分类</span>
               <select id="category-select"></select>
@@ -97,6 +110,7 @@
       <article class="card">
         <div class="card__top">
           <div class="badge-group">
+            <span class="badge badge--source"></span>
             <span class="badge badge--category"></span>
             <span class="badge badge--status"></span>
           </div>
