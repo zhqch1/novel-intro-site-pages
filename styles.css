@@ -85,6 +85,13 @@ body {
   gap: 12px;
 }
 
+.source-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
 .stat-card {
   padding: 16px;
   border-radius: var(--radius-sm);
@@ -101,6 +108,29 @@ body {
 
 .stat-card strong {
   font-size: 1.15rem;
+}
+
+.stat-card__hint {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.stat-card--source[data-source="cool18"] {
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+.stat-card--source[data-source="t66y"] {
+  border-color: rgba(20, 184, 166, 0.35);
+}
+
+.stat-card--source[data-source="111bz"] {
+  border-color: rgba(244, 114, 182, 0.35);
+}
+
+.stat-card--source[data-source="8xsk"] {
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 .layout {
@@ -288,6 +318,16 @@ body {
 .badge--source[data-source="t66y"] {
   background: rgba(20, 184, 166, 0.14);
   color: #99f6e4;
+}
+
+.badge--source[data-source="111bz"] {
+  background: rgba(244, 114, 182, 0.14);
+  color: #fbcfe8;
+}
+
+.badge--source[data-source="8xsk"] {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fde68a;
 }
 
 .badge--status[data-status="ready"] {

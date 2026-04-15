@@ -4,8 +4,7 @@ const elements = {
   statTotal: document.querySelector("#stat-total"),
   statSummarized: document.querySelector("#stat-summarized"),
   statUpdated: document.querySelector("#stat-updated"),
-  statCool18: document.querySelector("#stat-cool18"),
-  statT66y: document.querySelector("#stat-t66y"),
+  sourceStats: document.querySelector("#source-stats"),
   toolbar: document.querySelector("#filter-toolbar"),
   toolbarToggle: document.querySelector("#toolbar-toggle"),
   toolbarContent: document.querySelector("#toolbar-content"),
@@ -70,16 +69,25 @@ function getSourceStats(payload, key) {
   };
 }
 
+function renderSourceStats(payload) {
+  elements.sourceStats.innerHTML = payload.sources
+    .map(
+      (source) => `
+        <article class="stat-card stat-card--source" data-source="${source.key}">
+          <span class="stat-card__label">${source.label} 已生成</span>
+          <strong>${source.summarizedCount.toLocaleString("zh-CN")}</strong>
+          <small class="stat-card__hint">总条目 ${source.totalCount.toLocaleString("zh-CN")}</small>
+        </article>
+      `
+    )
+    .join("");
+}
+
 function setStats(payload) {
   elements.statTotal.textContent = payload.totalCount.toLocaleString("zh-CN");
   elements.statSummarized.textContent = payload.summarizedCount.toLocaleString("zh-CN");
   elements.statUpdated.textContent = formatTimestamp(payload.sourceUpdatedAt);
-  elements.statCool18.textContent = getSourceStats(payload, "cool18").summarizedCount.toLocaleString(
-    "zh-CN"
-  );
-  elements.statT66y.textContent = getSourceStats(payload, "t66y").summarizedCount.toLocaleString(
-    "zh-CN"
-  );
+  renderSourceStats(payload);
 }
 
 function populateSources(payload) {
