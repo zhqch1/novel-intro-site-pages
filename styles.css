@@ -133,6 +133,10 @@ body {
   border-color: rgba(245, 158, 11, 0.35);
 }
 
+.stat-card--source[data-source="alicesw"] {
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
 .layout {
   margin-top: 18px;
 }
@@ -328,6 +332,11 @@ body {
 .badge--source[data-source="8xsk"] {
   background: rgba(245, 158, 11, 0.14);
   color: #fde68a;
+}
+
+.badge--source[data-source="alicesw"] {
+  background: rgba(59, 130, 246, 0.14);
+  color: #bfdbfe;
 }
 
 .badge--status[data-status="ready"] {
